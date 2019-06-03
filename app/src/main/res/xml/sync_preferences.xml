@@ -19,7 +19,9 @@
 
     <SwitchPreferenceCompat
         app:key="sync"
-        app:title="@string/sync_title"/>
+        app:title="@string/sync_title"
+        android:summary="If the app should check for changes and notify you."
+    />
 
 
     <PreferenceCategory
@@ -30,21 +32,23 @@
             android:singleLine="true"
             android:title="Username"
             android:key="username"
+            android:summary="Username for authorizing with the server."
         />
         <EditTextPreference
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Password"
-            android:key="password"
+            android:title="Token"
+            android:key="token"
+            android:summary="Token for authorizing with the server."
         />
     </PreferenceCategory>
 
-    <!--    <SwitchPreferenceCompat-->
-    <!--        app:key="attachment"-->
-    <!--        app:title="@string/attachment_title"-->
-    <!--        app:summaryOn="@string/attachment_summary_on"-->
-    <!--        app:summaryOff="@string/attachment_summary_off"-->
-    <!--        app:dependency="sync"/>-->
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="attachment"-->
+<!--            app:title="@string/attachment_title"-->
+<!--            app:summaryOn="@string/attachment_summary_on"-->
+<!--            app:summaryOff="@string/attachment_summary_off"-->
+<!--            app:dependency="sync"/>-->
 
 
 </PreferenceScreen>
