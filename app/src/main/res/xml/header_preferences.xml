@@ -26,7 +26,7 @@
     <Preference
         app:key="sync_header"
         app:title="@string/sync_header"
-        app:icon="@drawable/sync"
+        app:icon="@drawable/ic_sync"
         app:fragment="me.melijn.dumbhome.SettingsActivity$SyncFragment"/>
 
 </PreferenceScreen>

@@ -15,17 +15,36 @@
   -->
 
 <PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
         app:key="sync"
         app:title="@string/sync_title"/>
 
-    <SwitchPreferenceCompat
-        app:key="attachment"
-        app:title="@string/attachment_title"
-        app:summaryOn="@string/attachment_summary_on"
-        app:summaryOff="@string/attachment_summary_off"
-        app:dependency="sync"/>
+
+    <PreferenceCategory
+        android:title="Account">
+
+        <EditTextPreference
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Username"
+            android:key="username"
+        />
+        <EditTextPreference
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Password"
+            android:key="password"
+        />
+    </PreferenceCategory>
+
+    <!--    <SwitchPreferenceCompat-->
+    <!--        app:key="attachment"-->
+    <!--        app:title="@string/attachment_title"-->
+    <!--        app:summaryOn="@string/attachment_summary_on"-->
+    <!--        app:summaryOff="@string/attachment_summary_off"-->
+    <!--        app:dependency="sync"/>-->
+
 
 </PreferenceScreen>
