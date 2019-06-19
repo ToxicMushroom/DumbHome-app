@@ -16,8 +16,8 @@ class DevicesFragment : Fragment() {
         val binding: FragmentDevicesBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_devices, container, false)
         val dashboardViewModel = ViewModelProviders.of(this).get(DevicesViewModel::class.java)
         binding.viewModel = dashboardViewModel
-        binding.setLifecycleOwner { lifecycle }
-
+        binding.lifecycleOwner = viewLifecycleOwner
+        dashboardViewModel.initValues(context)
         return binding.root
     }
 }

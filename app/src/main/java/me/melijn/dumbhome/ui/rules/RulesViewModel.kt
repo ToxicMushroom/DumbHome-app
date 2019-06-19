@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 class RulesViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+
+        value = "This is rules Fragment"
     }
     val text: LiveData<String>
             get() = _text
