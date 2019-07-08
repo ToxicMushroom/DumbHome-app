@@ -4,6 +4,6 @@
         android:id="@+id/menu_item_settings"
         android:title="@string/menu_item_settings"/>
     <item
-        android:id="@+id/sync"
+        android:id="@+id/menu_item_sync"
         android:title="@string/menu_item_sync"/>
 </menu>
