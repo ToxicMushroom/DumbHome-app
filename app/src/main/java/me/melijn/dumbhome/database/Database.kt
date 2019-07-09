@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.components.toSwitchComponent
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -18,9 +20,16 @@ class Database {
 
     fun initLiveData(context: Context) {
         val json = getAsJSONObject(context)
-        val jsonSwitches = json.getJSONArray("switches")
+        val jsonSwitches: JSONArray = try {
+            json.getJSONArray("switches")
+        } catch (ex: JSONException) {
+            json.put("switches", JSONArray())
+            writeDevices(context, json)
+            return
+        }
+
         val switchList = ArrayList<SwitchComponent>()
-        for (i in 0..jsonSwitches.length()) {
+        for (i in 0 until jsonSwitches.length()) {
             val jsonSwitch = jsonSwitches.getJSONObject(i)
             switchList.add(jsonSwitch.toSwitchComponent())
         }

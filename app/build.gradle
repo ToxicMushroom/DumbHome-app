@@ -40,6 +40,12 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
     implementation 'androidx.preference:preference:1.1.0-rc01'
+    implementation 'com.squareup.okhttp3:okhttp:4.0.0'
+
+    // Coroutines for getting off the UI thread
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import me.melijn.dumbhome.R
 import me.melijn.dumbhome.databinding.ActivitySyncBinding
+import me.melijn.dumbhome.io.DeviceRepository
 
 class SyncActivity : AppCompatActivity() {
 
@@ -25,8 +26,11 @@ class SyncActivity : AppCompatActivity() {
         binding.synViewModel = model
 
         val adapter = SyncDevicesAdapter()
+        val deviceRepository = DeviceRepository("")
 
-        model.switches.observe(this, Observer {
+
+
+        DeviceRepository.switches.observe(this, Observer {
 
             //TODO convert switchcomponent list to switchItem list then submit
             //adapter.submitList()
