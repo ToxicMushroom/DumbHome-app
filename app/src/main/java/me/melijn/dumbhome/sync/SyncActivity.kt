@@ -27,6 +27,7 @@ class SyncActivity : AppCompatActivity() {
         val adapter = SyncDevicesAdapter()
 
         model.switches.observe(this, Observer {
+
             //TODO convert switchcomponent list to switchItem list then submit
             //adapter.submitList()
         })

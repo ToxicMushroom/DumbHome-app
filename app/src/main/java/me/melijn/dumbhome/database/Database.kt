@@ -2,8 +2,8 @@ package me.melijn.dumbhome.database
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import me.melijn.dumbhome.components.Location
 import me.melijn.dumbhome.components.SwitchComponent
+import me.melijn.dumbhome.components.toSwitchComponent
 import org.json.JSONObject
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
 class Database {
 
     companion object {
-        val switches = MutableLiveData<List<SwitchComponent>>()
+        val switches = MutableLiveData<ArrayList<SwitchComponent>>()
     }
 
     fun initLiveData(context: Context) {
@@ -22,18 +22,10 @@ class Database {
         val switchList = ArrayList<SwitchComponent>()
         for (i in 0..jsonSwitches.length()) {
             val jsonSwitch = jsonSwitches.getJSONObject(i)
-            val switch = SwitchComponent(
-                jsonSwitch.getString("name"),
-                Location.valueOf(jsonSwitch.getString("location")),
-                jsonSwitch.getInt("id"),
-                false
-            )
-            switchList.add(switch)
+            switchList.add(jsonSwitch.toSwitchComponent())
         }
         switches.value = switchList
     }
-
-
 
     fun writeDevices(context: Context, obj: JSONObject) {
         val fos: FileOutputStream = context.openFileOutput("devices.json", Context.MODE_PRIVATE)
@@ -41,9 +33,8 @@ class Database {
         fos.close()
     }
 
-    fun getAsJSONObject(context: Context): JSONObject {
-        return JSONObject(readDevicesAsset(context))
-    }
+    fun getAsJSONObject(context: Context) = JSONObject(readDevicesAsset(context))
+
 
     private fun readDevicesAsset(context: Context): String? {
         return try {

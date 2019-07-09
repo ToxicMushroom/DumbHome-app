@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.sync.SyncActivity
 
 
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home, R.id.navigation_devices, R.id.navigation_rules))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        Database().initLiveData(applicationContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
