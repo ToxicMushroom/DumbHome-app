@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import me.melijn.dumbhome.R
 import me.melijn.dumbhome.databinding.ActivitySyncBinding
 import me.melijn.dumbhome.io.DeviceRepository
@@ -26,9 +27,14 @@ class SyncActivity : AppCompatActivity() {
         binding.synViewModel = model
 
         val adapter = SyncDevicesAdapter()
-        val deviceRepository = DeviceRepository("")
+        DeviceRepository(
+            PreferenceManager.getDefaultSharedPreferences(applicationContext).all,
+            model
+        )
 
-
+        model.jsonDevices.observe(this, Observer {
+            binding.textViewOne.text = it
+        })
 
         DeviceRepository.switches.observe(this, Observer {
 
