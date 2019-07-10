@@ -52,3 +52,17 @@ fun Database.addSwitch(context: Context, switchComponent: SwitchComponent) {
     Database.switches.value?.add(switchComponent)
     writeDevices(context, json.put("switches", jsonSwitches))
 }
+
+fun Database.setSwitches(context: Context, switchComponents: List<SwitchComponent>) {
+    val json = getAsJSONObject(context)
+    val jsonSwitches = json.getJSONArray("switches")
+
+
+    for (switchComponent in switchComponents) {
+        jsonSwitches.put(JSONObject(switchComponent.toJSONString()))
+    }
+
+    Database.switches.value?.clear()
+    Database.switches.value?.addAll(switchComponents)
+    writeDevices(context, json.put("switches", jsonSwitches))
+}

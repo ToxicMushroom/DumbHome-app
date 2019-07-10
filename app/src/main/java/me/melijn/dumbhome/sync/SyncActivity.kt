@@ -10,6 +10,8 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.R
+import me.melijn.dumbhome.components.setSwitches
+import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.ActivitySyncBinding
 import me.melijn.dumbhome.io.DeviceRepository
 
@@ -32,9 +34,6 @@ class SyncActivity : AppCompatActivity() {
 
         val adapter = SyncDevicesAdapter(ItemClickListener { switchItem ->
             switchItem.currentState = !switchItem.currentState
-            println(switchItem.switchComponent.toJSONString())
-            println(switchItem.currentState)
-
             val invalid =
                 model.switchItems.firstOrNull { otherSwitchItem -> otherSwitchItem.id == switchItem.id }
             if (invalid != null) {
@@ -58,7 +57,12 @@ class SyncActivity : AppCompatActivity() {
         })
 
         model.clicked.observe(this, Observer {
+            val switchesForStorage = model.switchItems.filter { item -> item.currentState }
+                .map { item -> item.switchComponent }
+            Database().setSwitches(this, switchesForStorage)
 
+            //Exit
+            onBackPressed()
         })
 
         DeviceRepository.switches.observe(this, Observer {
@@ -68,7 +72,8 @@ class SyncActivity : AppCompatActivity() {
                 }
 
                 val switchItem = DHItem.SwitchItem(switchComponent)
-                switchItem.currentState = storedSwitchITem?.currentState ?: false
+                switchItem.currentState =
+                    storedSwitchITem?.currentState ?: Database.switches.value?.contains(switchItem.switchComponent) != null ?: false
                 switchItem
             }
             model.switchItems.clear()
@@ -85,6 +90,4 @@ class SyncActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-
 }
