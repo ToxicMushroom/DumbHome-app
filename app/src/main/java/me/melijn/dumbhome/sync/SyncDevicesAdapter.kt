@@ -12,7 +12,8 @@ import me.melijn.dumbhome.databinding.ListItemSwitchBinding
 private const val ITEM_VIEW_TYPE_SWITCH = 0
 private const val ITEM_VIEW_TYPE_BUTTON = 1
 
-class SyncDevicesAdapter : ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
+class SyncDevicesAdapter(val clickListener: ItemClickListener) :
+    ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_SWITCH -> SwitchViewHolder.from(parent)
@@ -22,7 +23,12 @@ class SyncDevicesAdapter : ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDi
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when (holder) {
+            is SwitchViewHolder -> {
+                val switchItem = getItem(position) as DHItem.SwitchItem
+                holder.bind(switchItem, clickListener)
+            }
+        }
     }
 
     class SwitchViewHolder private constructor(val binding: ListItemSwitchBinding) :

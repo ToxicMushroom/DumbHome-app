@@ -3,14 +3,16 @@ package me.melijn.dumbhome.io
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import me.melijn.dumbhome.components.SwitchComponent
+import me.melijn.dumbhome.components.toSwitchComponent
 import me.melijn.dumbhome.sync.SyncViewModel
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 
 class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel) {
 
     companion object {
-        val switches = MutableLiveData<List<SwitchComponent>>()
+        val switches = MutableLiveData<ArrayList<SwitchComponent>>()
         val client = OkHttpClient()
     }
 
@@ -27,29 +29,34 @@ class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel
             val networkType = if (false) "remote" else "local"
 
             val protocol: String = if (map.getOrElse(networkType + "_https") {
-                    model.error.value = "$networkType port not set"
+                    postError("$networkType https not set")
+
                     return@withContext
                 } as Boolean) "https" else "http"
 
             val port: Int = Integer.parseInt(map.getOrElse(networkType + "_port") {
-                model.error.value = "$networkType port not set"
+                postError("$networkType port not set")
+
                 return@withContext
             } as String)
 
             val host: String = if (networkType == "local") {
                 map.getOrElse("local_ip") {
-                    model.error.value = "Local ip not set"
+                    postError("Local ip not set")
+
                     return@withContext
                 } as String
             } else {
                 map.getOrElse("remote_hostname") {
-                    model.error.value = "Remote hostname not set"
+                    postError("Remote hostname not set")
+
                     return@withContext
                 } as String
             }
 
             val token: String = map.getOrElse("token") {
-                model.error.value = "Token not set"
+                postError("Token not set")
+
                 return@withContext
             } as String
 
@@ -63,28 +70,37 @@ class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel
             client.newCall(request = request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
-                    CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-                        withContext(Dispatchers.Main) {
-                            model.error.value = "Request failed: ${e.message}"
-                        }
-                    }
+                    postError("Request failed: ${e.message}")
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-
-                    CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-                        withContext(Dispatchers.Main) {
-                            response.body?.string()?.let { convertResponseToComponents(it) }
-                        }
-                    }
-
+                    response.body?.string()?.let { convertResponseToComponents(it) }
                 }
             })
         }
     }
 
+    fun postError(message: String) {
+        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+            withContext(Dispatchers.Main) {
+                model.error.value = message
+            }
+        }
+    }
+
     private fun convertResponseToComponents(response: String) {
-        //TODO write actual code
-        model.jsonDevices.value = response
+        val jsonPresetObj = JSONObject(response).getJSONObject("presets")
+        val switchArray = jsonPresetObj.getJSONArray("switches")
+        val previousSwitchList = ArrayList<SwitchComponent>()
+        for (i in 0 until switchArray.length()) {
+            previousSwitchList.add(switchArray.getJSONObject(i).toSwitchComponent())
+        }
+        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+            withContext(Dispatchers.Main) {
+                model.jsonDevices.value = response
+                switches.value = previousSwitchList
+            }
+        }
+
     }
 }

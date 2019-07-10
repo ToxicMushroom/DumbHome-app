@@ -20,15 +20,13 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/appCompatCheckBox2"
+        <Switch
+            android:id="@+id/switchSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -37,15 +35,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="@{switchItem.switchComponent.name}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/appCompatCheckBox2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
