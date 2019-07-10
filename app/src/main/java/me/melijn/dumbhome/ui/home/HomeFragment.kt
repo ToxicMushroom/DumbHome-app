@@ -17,6 +17,7 @@ class HomeFragment : Fragment() {
         val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         binding.viewModel = homeViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
         homeViewModel.initValues(requireContext())
         return binding.root
     }

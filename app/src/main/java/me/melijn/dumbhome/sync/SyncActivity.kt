@@ -67,13 +67,14 @@ class SyncActivity : AppCompatActivity() {
 
         DeviceRepository.switches.observe(this, Observer {
             val switchItemList = it.map { switchComponent ->
-                val storedSwitchITem = model.switchItems.firstOrNull { it2 ->
+                val storedSwitchItem = model.switchItems.firstOrNull { it2 ->
                     switchComponent.id * 10 + ITEM_VIEW_TYPE_SWITCH == it2.id
                 }
 
                 val switchItem = DHItem.SwitchItem(switchComponent)
                 switchItem.currentState =
-                    storedSwitchITem?.currentState ?: Database.switches.value?.contains(switchItem.switchComponent) != null ?: false
+                    storedSwitchItem?.currentState
+                        ?: (Database.switches.value?.count { dbSwitch -> dbSwitch.id == switchItem.switchComponent.id } ?: 0 > 0)
                 switchItem
             }
             model.switchItems.clear()
