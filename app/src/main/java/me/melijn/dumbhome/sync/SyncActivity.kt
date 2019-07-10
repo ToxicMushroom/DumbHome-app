@@ -30,8 +30,18 @@ class SyncActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.syncViewModel = model
 
-        val adapter = SyncDevicesAdapter(ItemClickListener { switchComponent ->
-            println(switchComponent.toJSONString())
+        val adapter = SyncDevicesAdapter(ItemClickListener { switchItem ->
+            switchItem.currentState = !switchItem.currentState
+            println(switchItem.switchComponent.toJSONString())
+            println(switchItem.currentState)
+
+            val invalid =
+                model.switchItems.firstOrNull { otherSwitchItem -> otherSwitchItem.id == switchItem.id }
+            if (invalid != null) {
+                model.switchItems.remove(invalid)
+                invalid.currentState = switchItem.currentState
+                model.switchItems.add(invalid)
+            } else model.switchItems.add(switchItem)
         })
 
         DeviceRepository(
@@ -52,9 +62,18 @@ class SyncActivity : AppCompatActivity() {
         })
 
         DeviceRepository.switches.observe(this, Observer {
-            adapter.submitList(it.map { switchComponent ->
-                DHItem.SwitchItem(switchComponent)
-            })
+            val switchItemList = it.map { switchComponent ->
+                val storedSwitchITem = model.switchItems.firstOrNull { it2 ->
+                    switchComponent.id * 10 + ITEM_VIEW_TYPE_SWITCH == it2.id
+                }
+
+                val switchItem = DHItem.SwitchItem(switchComponent)
+                switchItem.currentState = storedSwitchITem?.currentState ?: false
+                switchItem
+            }
+            model.switchItems.clear()
+            model.switchItems.addAll(switchItemList)
+            adapter.submitList(switchItemList)
         })
 
         val manager = LinearLayoutManager(this)

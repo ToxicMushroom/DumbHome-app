@@ -11,7 +11,7 @@ class SwitchComponent(name: String, location: Location, val id: Int, var isOn: B
         return "{" +
                 "\n    \"name\": \"$name\"," +
                 "\n    \"location\": \"$location\"," +
-                "\n    \"id\": $id," +
+                "\n    \"id\": $id" +
                 "}"
     }
 }

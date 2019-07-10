@@ -9,8 +9,8 @@ import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.databinding.ListItemSwitchBinding
 
-private const val ITEM_VIEW_TYPE_SWITCH = 0
-private const val ITEM_VIEW_TYPE_BUTTON = 1
+const val ITEM_VIEW_TYPE_SWITCH = 0
+const val ITEM_VIEW_TYPE_BUTTON = 1
 
 class SyncDevicesAdapter(val clickListener: ItemClickListener) :
     ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
@@ -65,7 +65,8 @@ class DHItemDiffCallback : DiffUtil.ItemCallback<DHItem>() {
 sealed class DHItem {
     abstract val id: Int
 
-    data class SwitchItem(val switchComponent: SwitchComponent) : DHItem() {
+    data class SwitchItem(val switchComponent: SwitchComponent, var currentState: Boolean = false) :
+        DHItem() {
         override val id: Int = switchComponent.id * 10 + ITEM_VIEW_TYPE_SWITCH
     }
 }

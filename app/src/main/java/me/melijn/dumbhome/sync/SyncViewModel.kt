@@ -18,7 +18,17 @@ class SyncViewModel : ViewModel() {
     val clicked: LiveData<Boolean>
         get() = _clicked
 
+    val switchItems = ArrayList<DHItem.SwitchItem>()
+
     fun onSubmitClicked() {
         _clicked.value = !(clicked.value ?: false)
+    }
+
+    fun setError(message: String) {
+        _error.value = message
+    }
+
+    fun setResponse(message: String) {
+        _jsonDevices.value = message
     }
 }

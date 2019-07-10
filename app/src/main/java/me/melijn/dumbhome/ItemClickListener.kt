@@ -1,7 +1,7 @@
 package me.melijn.dumbhome
 
-import me.melijn.dumbhome.components.SwitchComponent
+import me.melijn.dumbhome.sync.DHItem
 
-class ItemClickListener(val clickListener: (switchComponent: SwitchComponent) -> Unit) {
-    fun onClick(switchComponent: SwitchComponent) = clickListener(switchComponent)
+class ItemClickListener(val clickListener: (switchItem: DHItem.SwitchItem) -> Unit) {
+    fun onClick(switchItem: DHItem.SwitchItem) = clickListener(switchItem)
 }

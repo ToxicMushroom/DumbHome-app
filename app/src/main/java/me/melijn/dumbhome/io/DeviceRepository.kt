@@ -83,7 +83,7 @@ class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel
     fun postError(message: String) {
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             withContext(Dispatchers.Main) {
-                model.error.value = message
+                model.setError(message)
             }
         }
     }
@@ -97,7 +97,7 @@ class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel
         }
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             withContext(Dispatchers.Main) {
-                model.jsonDevices.value = response
+                model.setResponse("")
                 switches.value = previousSwitchList
             }
         }
