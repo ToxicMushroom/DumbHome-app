@@ -5,18 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.components.Location
 import me.melijn.dumbhome.databinding.ListItemLocationBinding
+import me.melijn.dumbhome.objects.ItemClickListener
 
-class LocationAdapter() :
-    ListAdapter<HomeItem.LocationItem, RecyclerView.ViewHolder>(LocationItemDiffCallback()) {
+
+private const val ITEM_VIEW_TYPE_LOCATION = 0
+
+class HomeAdapter(val clickListener: ItemClickListener) :
+    ListAdapter<HomeItem, RecyclerView.ViewHolder>(LocationItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("FIX")
+        return when (viewType) {
+            ITEM_VIEW_TYPE_LOCATION -> LocationViewHolder.from(parent)
+            else -> throw ClassCastException("Unknown viewType $viewType")
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when (holder) {
+            is LocationViewHolder -> {
+                val locationItem = getItem(position) as HomeItem.LocationItem
+                holder.bind(locationItem, clickListener)
+            }
+        }
     }
 
     class LocationViewHolder private constructor(val binding: ListItemLocationBinding) :
@@ -39,17 +50,17 @@ class LocationAdapter() :
 
 }
 
-class LocationItemDiffCallback : DiffUtil.ItemCallback<HomeItem.LocationItem>() {
+class LocationItemDiffCallback : DiffUtil.ItemCallback<HomeItem>() {
     override fun areItemsTheSame(
-        oldItem: HomeItem.LocationItem,
-        newItem: HomeItem.LocationItem
+        oldItem: HomeItem,
+        newItem: HomeItem
     ): Boolean {
-        return oldItem.location == newItem.location
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: HomeItem.LocationItem,
-        newItem: HomeItem.LocationItem
+        oldItem: HomeItem,
+        newItem: HomeItem
     ): Boolean {
         return oldItem == newItem
     }

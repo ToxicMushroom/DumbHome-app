@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="me.melijn.dumbhome.ItemClickListener" />
+            type="me.melijn.dumbhome.objects.ItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

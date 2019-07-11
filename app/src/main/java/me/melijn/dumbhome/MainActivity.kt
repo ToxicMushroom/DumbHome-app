@@ -12,11 +12,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.sync.SyncActivity
+import me.melijn.dumbhome.utils.ExtensionFunctions
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Database().initLiveData(applicationContext)
+        ExtensionFunctions().init(applicationContext)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        Database().initLiveData(applicationContext)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

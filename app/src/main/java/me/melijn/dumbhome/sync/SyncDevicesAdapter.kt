@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.databinding.ListItemSubmitBinding
 import me.melijn.dumbhome.databinding.ListItemSwitchBinding
+import me.melijn.dumbhome.objects.ItemClickListener
 
 const val ITEM_VIEW_TYPE_SWITCH = 0
 const val ITEM_VIEW_TYPE_BUTTON = 1

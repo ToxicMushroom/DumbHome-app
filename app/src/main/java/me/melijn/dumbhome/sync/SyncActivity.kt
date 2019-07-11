@@ -8,12 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.R
 import me.melijn.dumbhome.components.setSwitches
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.ActivitySyncBinding
 import me.melijn.dumbhome.io.DeviceRepository
+import me.melijn.dumbhome.objects.ItemClickListener
 
 const val MAX_ITEMS_PER_TYPE = 1000
 class SyncActivity : AppCompatActivity() {
