@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import me.melijn.dumbhome.R
 import me.melijn.dumbhome.components.Location
@@ -25,15 +26,15 @@ class HomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         binding.viewModel = homeViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.lifecycleOwner = this
 
         val adapter = HomeAdapter(ItemClickListener(locationClickListener = { locationItem ->
-            println("such clickiness " + locationItem.location.toString())
+            this.findNavController()
+                .navigate(HomeFragmentDirections.actionNavigationHomeToSubHomeFragment(locationItem.location))
         }))
 
 
         val manager = GridLayoutManager(activity, 2)
-        manager.offsetChildrenVertical(0)
 
         binding.locationList.layoutManager = manager
         binding.locationList.adapter = adapter

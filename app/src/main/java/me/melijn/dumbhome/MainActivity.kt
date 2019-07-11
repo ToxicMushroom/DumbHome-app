@@ -1,6 +1,5 @@
 package me.melijn.dumbhome
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,7 +10,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.melijn.dumbhome.database.Database
-import me.melijn.dumbhome.sync.SyncActivity
 import me.melijn.dumbhome.utils.ExtensionFunctions
 
 
@@ -43,12 +41,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_item_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                findNavController(R.id.nav_host_fragment).navigate(R.id.settingsActivity)
             }
             R.id.menu_item_sync -> {
-                val intent = Intent(this, SyncActivity::class.java)
-                startActivity(intent)
+                findNavController(R.id.nav_host_fragment).navigate(R.id.syncActivity)
             }
         }
 

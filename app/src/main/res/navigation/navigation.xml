@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="me.melijn.dumbhome.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_rules"
+            app:destination="@id/navigation_rules" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_devices"
+            app:destination="@id/navigation_devices" />
+        <action
+            android:id="@+id/action_navigation_home_to_subHomeFragment"
+            app:destination="@+id/subHomeFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_devices2"
+            app:destination="@id/navigation_devices" />
+    </fragment>
+    <fragment android:id="@+id/navigation_devices" android:name="me.melijn.dumbhome.ui.devices.DevicesFragment"
+        android:label="@string/title_devices">
+        <action
+            android:id="@+id/action_navigation_devices_to_navigation_rules"
+            app:destination="@id/navigation_rules" />
+        <action
+            android:id="@+id/action_navigation_devices_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment android:id="@+id/navigation_rules" android:name="me.melijn.dumbhome.ui.rules.RulesFragment"
+        android:label="@string/title_rules">
+        <action
+            android:id="@+id/action_navigation_rules_to_navigation_devices"
+            app:destination="@id/navigation_devices" />
+        <action
+            android:id="@+id/action_navigation_rules_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/subHomeFragment"
+        android:name="me.melijn.dumbhome.ui.home.sub.SubHomeFragment"
+        android:label="SubHomeFragment">
+        <action
+            android:id="@+id/action_subHomeFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <argument
+            android:name="location"
+            app:argType="me.melijn.dumbhome.components.Location" />
+    </fragment>
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="me.melijn.dumbhome.SettingsActivity"
+        android:label="SettingsActivity" />
+    <activity
+        android:id="@+id/syncActivity"
+        android:name="me.melijn.dumbhome.sync.SyncActivity"
+        android:label="SyncActivity" />
+
+</navigation>
