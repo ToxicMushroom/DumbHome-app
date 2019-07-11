@@ -7,17 +7,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.melijn.dumbhome.ItemClickListener
 import me.melijn.dumbhome.components.SwitchComponent
+import me.melijn.dumbhome.databinding.ListItemSubmitBinding
 import me.melijn.dumbhome.databinding.ListItemSwitchBinding
 
 const val ITEM_VIEW_TYPE_SWITCH = 0
 const val ITEM_VIEW_TYPE_BUTTON = 1
+const val ITEM_VIEW_TYPE_FOOTER = 9
 
 class SyncDevicesAdapter(val clickListener: ItemClickListener) :
     ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+
             ITEM_VIEW_TYPE_SWITCH -> SwitchViewHolder.from(parent)
             //ITEM_VIEW_TYPE_BUTTON -> ButtonViewHolder.from(parent)
+
+            ITEM_VIEW_TYPE_FOOTER -> FooterViewHolder.from(parent)
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -28,6 +34,17 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
                 val switchItem = getItem(position) as DHItem.SwitchItem
                 holder.bind(switchItem, clickListener)
             }
+            is FooterViewHolder -> {
+                val footerItem = getItem(position) as DHItem.FooterItem
+                holder.bind(footerItem, clickListener)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is DHItem.SwitchItem -> ITEM_VIEW_TYPE_SWITCH
+            is DHItem.FooterItem -> ITEM_VIEW_TYPE_FOOTER
         }
     }
 
@@ -49,7 +66,23 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
         }
     }
 
+    class FooterViewHolder private constructor(val binding: ListItemSubmitBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
+        fun bind(footerItem: DHItem.FooterItem, clickListener: ItemClickListener) {
+            binding.footerItem = footerItem
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): FooterViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListItemSubmitBinding.inflate(layoutInflater, parent, false)
+                return FooterViewHolder(binding)
+            }
+        }
+    }
 }
 
 
@@ -69,4 +102,6 @@ sealed class DHItem {
         DHItem() {
         override val id: Int = switchComponent.id * 10 + ITEM_VIEW_TYPE_SWITCH
     }
+
+    data class FooterItem(override val id: Int) : DHItem()
 }
