@@ -12,7 +12,7 @@ import me.melijn.dumbhome.R
 import me.melijn.dumbhome.components.setSwitches
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.ActivitySyncBinding
-import me.melijn.dumbhome.io.DeviceRepository
+import me.melijn.dumbhome.io.SyncDeviceRepository
 import me.melijn.dumbhome.objects.ItemClickListener
 
 const val MAX_ITEMS_PER_TYPE = 1000
@@ -53,7 +53,7 @@ class SyncActivity : AppCompatActivity() {
             })
         )
 
-        DeviceRepository(
+        SyncDeviceRepository(
             PreferenceManager.getDefaultSharedPreferences(applicationContext).all,
             model
         )
@@ -66,7 +66,7 @@ class SyncActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        DeviceRepository.switches.observe(this, Observer {
+        SyncDeviceRepository.switches.observe(this, Observer {
 
             val switchItemList = it.map { switchComponent ->
                 val storedSwitchItem = model.switchItems.firstOrNull { it2 ->

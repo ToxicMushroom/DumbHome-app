@@ -19,8 +19,7 @@
             app:destination="@id/navigation_devices" />
         <action
             android:id="@+id/action_navigation_home_to_subHomeFragment"
-            app:destination="@+id/subHomeFragment"
-            app:enterAnim="@anim/slide_in_right" />
+            app:destination="@+id/sub_home_fragment" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_devices2"
             app:destination="@id/navigation_devices"
@@ -56,13 +55,12 @@
     </fragment>
 
     <fragment
-        android:id="@+id/subHomeFragment"
+        android:id="@+id/sub_home_fragment"
         android:name="me.melijn.dumbhome.ui.home.sub.SubHomeFragment"
         android:label="{locationName}">
         <action
             android:id="@+id/action_subHomeFragment_to_navigation_home"
-            app:destination="@id/navigation_home"
-            app:popExitAnim="@anim/slide_in_right" />
+            app:destination="@id/navigation_home" />
         <argument
             android:name="locationName"
             app:argType="string" />

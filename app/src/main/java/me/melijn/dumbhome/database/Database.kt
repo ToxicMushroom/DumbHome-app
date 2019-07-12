@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.components.toSwitchComponent
+import me.melijn.dumbhome.io.StateRepository
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -59,5 +60,10 @@ class Database {
 
             null
         }
+    }
+
+    fun refreshSwitchStates(preferenceMap: Map<String, Any?>, context: Context) {
+        switches.value =
+            switches.value?.let { StateRepository(preferenceMap, context).updateSwitchStates(it) }
     }
 }

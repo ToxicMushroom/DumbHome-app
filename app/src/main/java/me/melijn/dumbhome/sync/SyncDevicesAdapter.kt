@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.melijn.dumbhome.components.SwitchComponent
-import me.melijn.dumbhome.databinding.ListItemSubmitBinding
-import me.melijn.dumbhome.databinding.ListItemSwitchBinding
+import me.melijn.dumbhome.databinding.ListItemSyncSubmitBinding
+import me.melijn.dumbhome.databinding.ListItemSyncSwitchBinding
 import me.melijn.dumbhome.objects.ItemClickListener
 
 const val ITEM_VIEW_TYPE_SWITCH = 0
@@ -48,7 +48,7 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
         }
     }
 
-    class SwitchViewHolder private constructor(val binding: ListItemSwitchBinding) :
+    class SwitchViewHolder private constructor(val binding: ListItemSyncSwitchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DHItem.SwitchItem, clickListener: ItemClickListener) {
@@ -60,13 +60,13 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
         companion object {
             fun from(parent: ViewGroup): SwitchViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemSwitchBinding.inflate(layoutInflater, parent, false)
+                val binding = ListItemSyncSwitchBinding.inflate(layoutInflater, parent, false)
                 return SwitchViewHolder(binding)
             }
         }
     }
 
-    class FooterViewHolder private constructor(val binding: ListItemSubmitBinding) :
+    class FooterViewHolder private constructor(val binding: ListItemSyncSubmitBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(footerItem: DHItem.FooterItem, clickListener: ItemClickListener) {
@@ -78,7 +78,7 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
         companion object {
             fun from(parent: ViewGroup): FooterViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemSubmitBinding.inflate(layoutInflater, parent, false)
+                val binding = ListItemSyncSubmitBinding.inflate(layoutInflater, parent, false)
                 return FooterViewHolder(binding)
             }
         }

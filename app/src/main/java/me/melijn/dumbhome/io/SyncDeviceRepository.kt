@@ -9,7 +9,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
-class DeviceRepository(private val map: Map<String, *>, val model: SyncViewModel) {
+class SyncDeviceRepository(private val map: Map<String, *>, val model: SyncViewModel) {
 
     companion object {
         val switches = MutableLiveData<ArrayList<SwitchComponent>>()
