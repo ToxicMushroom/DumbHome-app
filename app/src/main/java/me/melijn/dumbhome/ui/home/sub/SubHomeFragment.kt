@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import me.melijn.dumbhome.MainActivity
 import me.melijn.dumbhome.R
+import me.melijn.dumbhome.components.toLocation
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.FragmentSubHomeBinding
 import me.melijn.dumbhome.objects.ItemClickListener
 import me.melijn.dumbhome.sync.DHItem
+
 
 class SubHomeFragment : Fragment() {
 
@@ -26,10 +30,10 @@ class SubHomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_sub_home, container, false)
         val subHomeViewModel = ViewModelProviders.of(this).get(SubHomeViewModel::class.java)
         val arguments = SubHomeFragmentArgs.fromBundle(arguments!!)
-        activity?.actionBar?.title = arguments.location.toString()
         binding.viewModel = subHomeViewModel
         binding.lifecycleOwner = this
-        activity?.title = arguments.location.toString()
+        val mainActivity = activity as MainActivity?
+
         val adapter = SubHomeAdapter(ItemClickListener())
 
 
@@ -39,7 +43,7 @@ class SubHomeFragment : Fragment() {
 
 
         val switchItemList = Database.switches.value?.filter {
-            it.location == arguments.location
+            it.location == arguments.locationName.toLocation()
         }?.map { DHItem.SwitchItem(it, false) }
 
         println(switchItemList?.joinToString())
@@ -48,14 +52,12 @@ class SubHomeFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.home -> {
-                activity?.onBackPressed()
-                true
+        when (item.itemId) {
+            android.R.id.home -> findNavController().navigate(SubHomeFragmentDirections.actionSubHomeFragmentToNavigationHome())
+
+            else -> {
             }
-            else -> super.onOptionsItemSelected(item)
         }
+        return super.onOptionsItemSelected(item)
     }
-
-
 }

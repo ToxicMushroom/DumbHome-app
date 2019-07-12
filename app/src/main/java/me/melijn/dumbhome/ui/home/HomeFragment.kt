@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
 
         val adapter = HomeAdapter(ItemClickListener(locationClickListener = { locationItem ->
             this.findNavController()
-                .navigate(HomeFragmentDirections.actionNavigationHomeToSubHomeFragment(locationItem.location))
+                .navigate(HomeFragmentDirections.actionNavigationHomeToSubHomeFragment(locationItem.location.toName()))
         }))
 
 
