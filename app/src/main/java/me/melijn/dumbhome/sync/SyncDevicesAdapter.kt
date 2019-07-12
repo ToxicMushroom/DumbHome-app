@@ -15,7 +15,7 @@ const val ITEM_VIEW_TYPE_BUTTON = 1
 const val ITEM_VIEW_TYPE_FOOTER = 9
 
 class SyncDevicesAdapter(val clickListener: ItemClickListener) :
-    ListAdapter<DHItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
+    ListAdapter<DHSyncItem, RecyclerView.ViewHolder>(DHItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -31,11 +31,11 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SwitchViewHolder -> {
-                val switchItem = getItem(position) as DHItem.SwitchItem
+                val switchItem = getItem(position) as DHSyncItem.SwitchItem
                 holder.bind(switchItem, clickListener)
             }
             is FooterViewHolder -> {
-                val footerItem = getItem(position) as DHItem.FooterItem
+                val footerItem = getItem(position) as DHSyncItem.FooterItem
                 holder.bind(footerItem, clickListener)
             }
         }
@@ -43,15 +43,15 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is DHItem.SwitchItem -> ITEM_VIEW_TYPE_SWITCH
-            is DHItem.FooterItem -> ITEM_VIEW_TYPE_FOOTER
+            is DHSyncItem.SwitchItem -> ITEM_VIEW_TYPE_SWITCH
+            is DHSyncItem.FooterItem -> ITEM_VIEW_TYPE_FOOTER
         }
     }
 
     class SwitchViewHolder private constructor(val binding: ListItemSyncSwitchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: DHItem.SwitchItem, clickListener: ItemClickListener) {
+        fun bind(item: DHSyncItem.SwitchItem, clickListener: ItemClickListener) {
             binding.switchItem = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -69,7 +69,7 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
     class FooterViewHolder private constructor(val binding: ListItemSyncSubmitBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(footerItem: DHItem.FooterItem, clickListener: ItemClickListener) {
+        fun bind(footerItem: DHSyncItem.FooterItem, clickListener: ItemClickListener) {
             binding.footerItem = footerItem
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -86,22 +86,22 @@ class SyncDevicesAdapter(val clickListener: ItemClickListener) :
 }
 
 
-class DHItemDiffCallback : DiffUtil.ItemCallback<DHItem>() {
-    override fun areItemsTheSame(oldItem: DHItem, newItem: DHItem): Boolean =
+class DHItemDiffCallback : DiffUtil.ItemCallback<DHSyncItem>() {
+    override fun areItemsTheSame(oldItem: DHSyncItem, newItem: DHSyncItem): Boolean =
         oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: DHItem, newItem: DHItem): Boolean {
+    override fun areContentsTheSame(oldItem: DHSyncItem, newItem: DHSyncItem): Boolean {
         return oldItem == newItem
     }
 }
 
-sealed class DHItem {
+sealed class DHSyncItem {
     abstract val id: Int
 
     data class SwitchItem(val switchComponent: SwitchComponent, var currentState: Boolean = false) :
-        DHItem() {
-        override val id: Int = switchComponent.id * 10 + ITEM_VIEW_TYPE_SWITCH
+        DHSyncItem() {
+        override val id: Int = ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE + switchComponent.id
     }
 
-    data class FooterItem(override val id: Int) : DHItem()
+    data class FooterItem(override val id: Int) : DHSyncItem()
 }

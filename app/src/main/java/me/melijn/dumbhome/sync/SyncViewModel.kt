@@ -14,7 +14,7 @@ class SyncViewModel : ViewModel() {
     val jsonDevices: LiveData<String>
         get() = _jsonDevices
 
-    val switchItems = ArrayList<DHItem.SwitchItem>()
+    val switchItems = ArrayList<DHSyncItem.SwitchItem>()
 
     fun setError(message: String) {
         _error.value = message

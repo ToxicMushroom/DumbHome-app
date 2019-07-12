@@ -8,7 +8,7 @@
 
         <variable
             name="switchItem"
-            type="me.melijn.dumbhome.sync.DHItem.SwitchItem" />
+            type="me.melijn.dumbhome.sync.DHSyncItem.SwitchItem" />
 
         <variable
             name="clickListener"

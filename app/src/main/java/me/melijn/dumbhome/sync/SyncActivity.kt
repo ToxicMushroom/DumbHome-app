@@ -73,14 +73,14 @@ class SyncActivity : AppCompatActivity() {
                     switchComponent.id + ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE == it2.id
                 }
 
-                val switchItem = DHItem.SwitchItem(switchComponent)
+                val switchItem = DHSyncItem.SwitchItem(switchComponent)
                 switchItem.currentState = storedSwitchItem?.currentState
                         ?: (Database.switches.value?.count { dbSwitch -> dbSwitch.id == switchItem.switchComponent.id } ?: 0 > 0)
                 switchItem
             }
             model.switchItems.clear()
             model.switchItems.addAll(switchItemList)
-            adapter.submitList(switchItemList + listOf(DHItem.FooterItem(ITEM_VIEW_TYPE_FOOTER * MAX_ITEMS_PER_TYPE)))
+            adapter.submitList(switchItemList + listOf(DHSyncItem.FooterItem(ITEM_VIEW_TYPE_FOOTER * MAX_ITEMS_PER_TYPE)))
         })
 
         val manager = LinearLayoutManager(this)

@@ -7,7 +7,7 @@
 
         <variable
             name="footerItem"
-            type="me.melijn.dumbhome.sync.DHItem.FooterItem" />
+            type="me.melijn.dumbhome.sync.DHSyncItem.FooterItem" />
 
         <variable
             name="clickListener"

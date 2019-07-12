@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.databinding.ListItemSubHomeSwitchBinding
 import me.melijn.dumbhome.objects.ItemClickListener
-import me.melijn.dumbhome.sync.DHItem
 import me.melijn.dumbhome.sync.ITEM_VIEW_TYPE_SWITCH
+import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
 
 class SubHomeAdapter(val clickListener: ItemClickListener) :
     ListAdapter<DHItem, RecyclerView.ViewHolder>(SubHomeItemDiffCallback()) {
@@ -65,4 +66,10 @@ class SubHomeItemDiffCallback : DiffUtil.ItemCallback<DHItem>() {
     }
 }
 
+sealed class DHItem {
+    abstract val id: Int
 
+    data class SwitchItem(val switchComponent: SwitchComponent) : DHItem() {
+        override val id: Int = ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE + switchComponent.id
+    }
+}
