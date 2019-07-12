@@ -14,7 +14,6 @@ import me.melijn.dumbhome.components.toLocation
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.FragmentSubHomeBinding
 import me.melijn.dumbhome.objects.ItemClickListener
-import me.melijn.dumbhome.sync.DHSyncItem
 
 
 class SubHomeFragment : Fragment() {
@@ -37,7 +36,7 @@ class SubHomeFragment : Fragment() {
 
         val switchItemList = Database.switches.value?.filter {
             it.location == arguments.locationName.toLocation()
-        }?.map { DHSyncItem.SwitchItem(it, false) }
+        }?.map { DHItem.SwitchItem(it) }
 
         binding.viewModel = subHomeViewModel
         binding.lifecycleOwner = this
