@@ -77,6 +77,5 @@ sealed class DHItem {
         init {
             this.state.value = false
         }
-
     }
 }

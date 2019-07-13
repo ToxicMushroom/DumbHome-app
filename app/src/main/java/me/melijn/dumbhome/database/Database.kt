@@ -64,8 +64,11 @@ class Database {
 
     fun refreshSwitchStates(preferenceMap: Map<String, Any?>, context: Context) {
         switches.value?.let {
+            val list = ArrayList<SwitchComponent>()
+            it.iterator().forEach { el -> list.add(el) }
+
             StateRepository(preferenceMap, context).updateSwitchStates(
-                it
+                list
             )
         }
     }

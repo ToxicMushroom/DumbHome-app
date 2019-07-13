@@ -22,10 +22,11 @@ import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
 
 class SubHomeFragment : Fragment() {
 
-    private var switchItemList: List<DHItem.SwitchItem> = ArrayList()
+
     private val mInterval = 250L // 5 seconds by default, can be changed later
     private var mHandler: Handler? = null
     private var preferenceMap: Map<String, Any?>? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,28 +44,26 @@ class SubHomeFragment : Fragment() {
 
         val manager = LinearLayoutManager(activity)
 
-        switchItemList = Database.switches.value?.filter {
-            it.location == arguments.locationName.toLocation()
-        }?.map { DHItem.SwitchItem(it) }!!
-
         binding.viewModel = subHomeViewModel
         binding.lifecycleOwner = this
 
         binding.deviceHomeList.layoutManager = manager
         binding.deviceHomeList.adapter = adapter
 
+        subHomeViewModel.switchItemList = Database.switches.value?.filter {
+            it.location == arguments.locationName.toLocation()
+        }?.map { DHItem.SwitchItem(it) }!!
 
         Database.switches.observe(this, Observer { array ->
-            for (switchComponent in array) {
-                val switchItem =
-                    switchItemList.find { switchItem -> switchItem.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
-                switchItem?.let {
-                    switchItemList[switchItemList.indexOf(it)].state.value = switchComponent.isOn
-                }
+            for (switchComponent in array.iterator()) {
+                val index =
+                    subHomeViewModel.switchItemList.indexOfFirst { item -> item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
+                if (subHomeViewModel.switchItemList.size > index && index > -1)
+                    subHomeViewModel.switchItemList[index].state.value = switchComponent.isOn
             }
         })
 
-        adapter.submitList(switchItemList)
+        adapter.submitList(subHomeViewModel.switchItemList)
 
         preferenceMap =
             PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext).all

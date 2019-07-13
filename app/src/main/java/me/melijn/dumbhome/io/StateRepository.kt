@@ -15,6 +15,7 @@ import java.io.IOException
 class StateRepository(private val preferenceMap: Map<String, *>, val context: Context) {
 
     fun updateSwitchStates(switches: ArrayList<SwitchComponent>) {
+
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val path = "switches/states"
