@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import me.melijn.dumbhome.R
 import me.melijn.dumbhome.components.Location
+import me.melijn.dumbhome.ui.sync.ITEM_VIEW_TYPE_SWITCH
 import me.melijn.dumbhome.utils.toPx
 
 
@@ -19,6 +20,18 @@ fun ImageView.setLocationImage(location: Location?) {
                 Location.SPEELKAMER -> R.drawable.ic_supernintendo_controller
                 Location.WOONKAMER -> R.drawable.ic_family_sofa
                 Location.ANDERE -> R.drawable.ic_lightbulb_outline_black_24dp
+            }
+        )
+    }
+}
+
+@BindingAdapter("deviceImage")
+fun ImageView.setDeviceImage(id: Int?) {
+    id?.let {
+        setImageResource(
+            when (id) {
+                ITEM_VIEW_TYPE_SWITCH -> R.drawable.ic_switch
+                else -> R.drawable.ic_lightbulb_outline_black_24dp
             }
         )
     }

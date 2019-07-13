@@ -38,6 +38,9 @@
             android:id="@+id/action_navigation_devices_to_navigation_home"
             app:destination="@id/navigation_home"
             app:popEnterAnim="@anim/slide_in_right" />
+        <action
+            android:id="@+id/action_navigation_devices_to_subDevicesFragment"
+            app:destination="@id/subDevicesFragment" />
     </fragment>
 
     <fragment
@@ -74,5 +77,19 @@
         android:id="@+id/syncActivity"
         android:name="me.melijn.dumbhome.ui.sync.SyncActivity"
         android:label="SyncActivity" />
+    <fragment
+        android:id="@+id/subDevicesFragment"
+        android:name="me.melijn.dumbhome.ui.devices.sub.SubDevicesFragment"
+        android:label="{deviceName}">
+        <action
+            android:id="@+id/action_subDevicesFragment_to_navigation_devices"
+            app:destination="@id/navigation_devices" />
+        <argument
+            android:name="deviceName"
+            app:argType="string" />
+        <argument
+            android:name="deviceType"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>
