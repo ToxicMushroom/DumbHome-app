@@ -2,9 +2,11 @@ package me.melijn.dumbhome.ui.home.sub
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.SparseLongArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.getOrDefault
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,9 +25,11 @@ import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
 class SubHomeFragment : Fragment() {
 
 
-    private val mInterval = 250L // 5 seconds by default, can be changed later
+    private val mInterval = 1000L //millis
+    private val networkCooldown = 5000L //millis
     private var mHandler: Handler? = null
     private var preferenceMap: Map<String, Any?>? = null
+    private var onCooldown = SparseLongArray()
 
 
     override fun onCreateView(
@@ -40,7 +44,9 @@ class SubHomeFragment : Fragment() {
 
         val arguments = SubHomeFragmentArgs.fromBundle(arguments!!)
 
-        val adapter = SubHomeAdapter(ItemClickListener())
+        val adapter = SubHomeAdapter(ItemClickListener(subHomeClickListener = { switchItem ->
+            onCooldown.append(switchItem.id, System.currentTimeMillis())
+        }))
 
         val manager = LinearLayoutManager(activity)
 
@@ -58,8 +64,17 @@ class SubHomeFragment : Fragment() {
             for (switchComponent in array.iterator()) {
                 val index =
                     subHomeViewModel.switchItemList.indexOfFirst { item -> item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
-                if (subHomeViewModel.switchItemList.size > index && index > -1)
+                if (index != -1 && subHomeViewModel.switchItemList[index].state.value != switchComponent.isOn) {//check if needs update and index isn't non existing
+
+                    if (onCooldown.getOrDefault(
+                            subHomeViewModel.switchItemList[index].id,
+                            0
+                        ) > System.currentTimeMillis() - networkCooldown
+                    ) return@Observer //Still on cooldown
+
                     subHomeViewModel.switchItemList[index].state.value = switchComponent.isOn
+                    adapter.notifyItemChanged(index)
+                }
             }
         })
 
