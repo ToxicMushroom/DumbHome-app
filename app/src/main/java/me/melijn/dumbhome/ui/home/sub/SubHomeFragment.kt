@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +15,13 @@ import me.melijn.dumbhome.components.toLocation
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.FragmentSubHomeBinding
 import me.melijn.dumbhome.objects.ItemClickListener
+import me.melijn.dumbhome.sync.ITEM_VIEW_TYPE_SWITCH
+import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
 
 
 class SubHomeFragment : Fragment() {
+
+    private var switchItemList: List<DHItem.SwitchItem> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +39,9 @@ class SubHomeFragment : Fragment() {
 
         val manager = LinearLayoutManager(activity)
 
-        val switchItemList = Database.switches.value?.filter {
+        switchItemList = Database.switches.value?.filter {
             it.location == arguments.locationName.toLocation()
-        }?.map { DHItem.SwitchItem(it) }
+        }?.map { DHItem.SwitchItem(it) }!!
 
         binding.viewModel = subHomeViewModel
         binding.lifecycleOwner = this
@@ -44,6 +49,7 @@ class SubHomeFragment : Fragment() {
         binding.deviceHomeList.layoutManager = manager
         binding.deviceHomeList.adapter = adapter
 
+        switchItemList[0].state.value = true
         adapter.submitList(switchItemList)
         activity?.applicationContext?.let {
             Database().refreshSwitchStates(
@@ -51,6 +57,15 @@ class SubHomeFragment : Fragment() {
                 it
             )
         }
+        Database.switches.observe(this, Observer { array ->
+            for (switchComponent in array) {
+                val switchItem =
+                    switchItemList.find { switchItem -> switchItem.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
+                switchItem?.let {
+                    switchItemList[switchItemList.indexOf(it)].state.value = switchComponent.isOn
+                }
+            }
+        })
 
         return binding.root
     }

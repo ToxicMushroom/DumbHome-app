@@ -63,7 +63,10 @@ class Database {
     }
 
     fun refreshSwitchStates(preferenceMap: Map<String, Any?>, context: Context) {
-        switches.value =
-            switches.value?.let { StateRepository(preferenceMap, context).updateSwitchStates(it) }
+        switches.value?.let {
+            StateRepository(preferenceMap, context).updateSwitchStates(
+                it
+            )
+        }
     }
 }

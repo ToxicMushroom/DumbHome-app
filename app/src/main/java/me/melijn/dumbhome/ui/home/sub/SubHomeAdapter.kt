@@ -2,6 +2,7 @@ package me.melijn.dumbhome.ui.home.sub
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -71,5 +72,11 @@ sealed class DHItem {
 
     data class SwitchItem(val switchComponent: SwitchComponent) : DHItem() {
         override val id: Int = ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE + switchComponent.id
+        val state = MutableLiveData<Boolean>()
+
+        init {
+            this.state.value = false
+        }
+
     }
 }

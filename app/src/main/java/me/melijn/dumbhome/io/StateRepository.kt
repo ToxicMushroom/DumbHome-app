@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import kotlinx.coroutines.*
 import me.melijn.dumbhome.components.SwitchComponent
+import me.melijn.dumbhome.database.Database
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -13,7 +14,7 @@ import java.io.IOException
 
 class StateRepository(private val preferenceMap: Map<String, *>, val context: Context) {
 
-    fun updateSwitchStates(switches: ArrayList<SwitchComponent>): ArrayList<SwitchComponent> {
+    fun updateSwitchStates(switches: ArrayList<SwitchComponent>) {
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val path = "switches/states"
@@ -67,19 +68,23 @@ class StateRepository(private val preferenceMap: Map<String, *>, val context: Co
                             val switchArray = responseObj.getJSONArray("switches")
                             for (i in 0 until switchArray.length()) {
                                 val switch = JSONObject(switchArray.getString(i))
-                                switches.removeAll { match -> match.id == switch.getInt("id") }
 
                                 val switchComponent =
                                     switches.find { match -> match.id == switch.getInt("id") }
+                                switches.removeAll { match -> match.id == switch.getInt("id") }
                                 switchComponent?.isOn = switch.getBoolean("state")
                                 switchComponent?.let { it1 -> switches.add(it1) }
+                            }
+                        }
+                        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+                            withContext(Dispatchers.Main) {
+                                Database.switches.value = switches
                             }
                         }
                     }
                 })
             }
         }
-        return switches
     }
 
     fun postError(message: String) {
