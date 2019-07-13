@@ -1,4 +1,4 @@
-package me.melijn.dumbhome.sync
+package me.melijn.dumbhome.ui.sync
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.components.toSwitchComponent
-import me.melijn.dumbhome.sync.SyncViewModel
+import me.melijn.dumbhome.ui.sync.SyncViewModel
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
-class SyncDeviceRepository(private val map: Map<String, *>, val model: SyncViewModel) {
+class SyncDeviceRepository(private val map: Map<String, *>, private val model: SyncViewModel) {
 
     companion object {
         val switches = MutableLiveData<ArrayList<SwitchComponent>>()
@@ -22,11 +22,16 @@ class SyncDeviceRepository(private val map: Map<String, *>, val model: SyncViewM
         }
     }
 
-    suspend fun refreshDeviceRepository() {
+    private suspend fun refreshDeviceRepository() {
         withContext(Dispatchers.IO) {
             val path = "presets/list"
             val query = "?global=false"
-            val networkType = if (false) "remote" else "local"
+            val networkType: String = if ((map.getOrElse("remote_ip") {
+                    postError("remote ip not set")
+
+                    return@withContext
+                } as String) == IPCheckerRepository.publicIp) "local" else "remote"
+
 
             val protocol: String = if (map.getOrElse(networkType + "_https") {
                     postError("$networkType https not set")

@@ -72,7 +72,7 @@
         android:label="SettingsActivity" />
     <activity
         android:id="@+id/syncActivity"
-        android:name="me.melijn.dumbhome.sync.SyncActivity"
+        android:name="me.melijn.dumbhome.ui.sync.SyncActivity"
         android:label="SyncActivity" />
 
 </navigation>

@@ -1,4 +1,4 @@
-package me.melijn.dumbhome.sync
+package me.melijn.dumbhome.ui.sync
 
 import android.os.Bundle
 import android.widget.Toast

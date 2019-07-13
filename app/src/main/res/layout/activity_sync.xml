@@ -6,13 +6,13 @@
     <data>
         <variable
             name="syncViewModel"
-            type="me.melijn.dumbhome.sync.SyncViewModel" />
+            type="me.melijn.dumbhome.ui.sync.SyncViewModel" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".sync.SyncActivity">
+            tools:context=".ui.sync.SyncActivity">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/device_sync_list"

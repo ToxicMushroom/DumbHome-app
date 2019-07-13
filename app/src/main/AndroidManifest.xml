@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".sync.SyncActivity">
+        <activity android:name="me.melijn.dumbhome.ui.sync.SyncActivity">
         </activity>
         <activity
             android:name=".SettingsActivity"

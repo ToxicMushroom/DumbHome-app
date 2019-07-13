@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.melijn.dumbhome.database.Database
+import me.melijn.dumbhome.io.IPCheckerRepository
 import me.melijn.dumbhome.utils.ExtensionFunctions
 
 
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             onNavDestinationSelected(item, navController)
         }
         navView.setupWithNavController(navController)
+        IPCheckerRepository().updatePublicIp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

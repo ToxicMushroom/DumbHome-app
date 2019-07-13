@@ -1,8 +1,8 @@
 package me.melijn.dumbhome.objects
 
-import me.melijn.dumbhome.sync.DHSyncItem
 import me.melijn.dumbhome.ui.home.HomeItem
 import me.melijn.dumbhome.ui.home.sub.DHItem
+import me.melijn.dumbhome.ui.sync.DHSyncItem
 
 class ItemClickListener(
     val syncClickListener: (switchItem: DHSyncItem.SwitchItem) -> Unit = {},

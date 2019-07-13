@@ -18,8 +18,8 @@ import me.melijn.dumbhome.components.toLocation
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.FragmentSubHomeBinding
 import me.melijn.dumbhome.objects.ItemClickListener
-import me.melijn.dumbhome.sync.ITEM_VIEW_TYPE_SWITCH
-import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
+import me.melijn.dumbhome.ui.sync.ITEM_VIEW_TYPE_SWITCH
+import me.melijn.dumbhome.ui.sync.MAX_ITEMS_PER_TYPE
 
 
 class SubHomeFragment : Fragment() {

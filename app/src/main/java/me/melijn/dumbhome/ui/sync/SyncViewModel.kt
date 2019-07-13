@@ -1,4 +1,4 @@
-package me.melijn.dumbhome.sync
+package me.melijn.dumbhome.ui.sync
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

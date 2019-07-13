@@ -43,7 +43,7 @@ class Database {
         fos.close()
     }
 
-    fun getAsJSONObject(context: Context) = JSONObject(readDevicesAsset(context))
+    fun getAsJSONObject(context: Context) = JSONObject(readDevicesAsset(context) ?: "{}")
 
 
     private fun readDevicesAsset(context: Context): String? {
