@@ -1,6 +1,7 @@
 package me.melijn.dumbhome.ui.home.sub
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,9 @@ import me.melijn.dumbhome.sync.MAX_ITEMS_PER_TYPE
 class SubHomeFragment : Fragment() {
 
     private var switchItemList: List<DHItem.SwitchItem> = ArrayList()
+    private val mInterval = 250L // 5 seconds by default, can be changed later
+    private var mHandler: Handler? = null
+    private var preferenceMap: Map<String, Any?>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,14 +53,7 @@ class SubHomeFragment : Fragment() {
         binding.deviceHomeList.layoutManager = manager
         binding.deviceHomeList.adapter = adapter
 
-        switchItemList[0].state.value = true
-        adapter.submitList(switchItemList)
-        activity?.applicationContext?.let {
-            Database().refreshSwitchStates(
-                PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext).all,
-                it
-            )
-        }
+
         Database.switches.observe(this, Observer { array ->
             for (switchComponent in array) {
                 val switchItem =
@@ -67,7 +64,46 @@ class SubHomeFragment : Fragment() {
             }
         })
 
+        adapter.submitList(switchItemList)
+
+        preferenceMap =
+            PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext).all
+        mHandler = Handler()
+        startRepeatingTask()
+
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopRepeatingTask()
+    }
+
+    private val mStatusChecker: Runnable = object : Runnable {
+        override fun run() {
+            try {
+                activity?.applicationContext?.let { context ->
+                    preferenceMap?.let { map ->
+                        Database().refreshSwitchStates(
+                            map,
+                            context
+                        )
+                    }
+                }
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler?.postDelayed(this, mInterval)
+            }
+        }
+    }
+
+    private fun startRepeatingTask() {
+        mStatusChecker.run()
+    }
+
+    private fun stopRepeatingTask() {
+        mHandler?.removeCallbacks(mStatusChecker)
     }
 
 }

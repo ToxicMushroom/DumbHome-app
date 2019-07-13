@@ -38,7 +38,7 @@
             android:id="@+id/switchSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={switchItem.state}"
+            android:checked="@{switchItem.state}"
             android:onClick="@{() -> clickListener.onClick(switchItem)}"
             android:padding="8dp"
             android:layout_margin="8dp"
