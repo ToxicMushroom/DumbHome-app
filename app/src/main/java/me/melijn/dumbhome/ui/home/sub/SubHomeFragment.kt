@@ -17,6 +17,7 @@ import me.melijn.dumbhome.R
 import me.melijn.dumbhome.components.toLocation
 import me.melijn.dumbhome.database.Database
 import me.melijn.dumbhome.databinding.FragmentSubHomeBinding
+import me.melijn.dumbhome.io.StateRepository
 import me.melijn.dumbhome.objects.ItemClickListener
 import me.melijn.dumbhome.ui.sync.ITEM_VIEW_TYPE_SWITCH
 import me.melijn.dumbhome.ui.sync.MAX_ITEMS_PER_TYPE
@@ -46,6 +47,14 @@ class SubHomeFragment : Fragment() {
 
         val adapter = SubHomeAdapter(ItemClickListener(subHomeClickListener = { switchItem ->
             onCooldown.append(switchItem.id, System.currentTimeMillis())
+            preferenceMap?.let { map ->
+                activity?.applicationContext?.let { context ->
+                    StateRepository(
+                        map,
+                        context
+                    ).sendSwitchUpdate(switchItem)
+                }
+            }
         }))
 
         val manager = LinearLayoutManager(activity)

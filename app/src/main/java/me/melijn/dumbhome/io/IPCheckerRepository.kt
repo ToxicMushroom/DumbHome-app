@@ -18,7 +18,7 @@ class IPCheckerRepository {
                     .build()
 
                 val response = SyncDeviceRepository.client.newCall(request).execute()
-                publicIp = response.body?.string() ?: ""
+                publicIp = (response.body?.string() ?: "").replace("\n", "")
             }
         }
     }

@@ -5,16 +5,14 @@ import android.widget.Toast
 import kotlinx.coroutines.*
 import me.melijn.dumbhome.components.SwitchComponent
 import me.melijn.dumbhome.database.Database
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Request
-import okhttp3.Response
+import me.melijn.dumbhome.ui.home.sub.DHItem
+import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
 class StateRepository(private val preferenceMap: Map<String, *>, val context: Context) {
 
-    fun sendSwitchUpdate(switchComponent: SwitchComponent) {
+    fun sendSwitchUpdate(switchItem: DHItem.SwitchItem) {
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val path1 = "switches/"
@@ -55,11 +53,18 @@ class StateRepository(private val preferenceMap: Map<String, *>, val context: Co
                     postError("Token not set")
                     return@withContext
                 } as String
+
+                val requestBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("state", switchItem.state.value.toString())
+                    .build()
+
                 val request = Request.Builder()
                     .header("token", token)
                     .url(
-                        "$protocol://$host:$port/$path1${switchComponent.id}$path2"
+                        "$protocol://$host:$port/$path1${switchItem.switchComponent.id}$path2"
                     )
+                    .post(requestBody)
                     .build()
 
                 SyncDeviceRepository.client.newCall(request = request).enqueue(object : Callback {
