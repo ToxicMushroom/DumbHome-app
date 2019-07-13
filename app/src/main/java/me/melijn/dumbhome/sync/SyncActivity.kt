@@ -34,7 +34,7 @@ class SyncActivity : AppCompatActivity() {
         binding.syncViewModel = model
 
         val adapter = SyncDevicesAdapter(
-            ItemClickListener(switchClickListener = { switchItem ->
+            ItemClickListener(syncClickListener = { switchItem ->
                 switchItem.currentState = !switchItem.currentState
                 val invalid =
                     model.switchItems.firstOrNull { otherSwitchItem -> otherSwitchItem.id == switchItem.id }

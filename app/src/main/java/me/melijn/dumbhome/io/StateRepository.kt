@@ -66,7 +66,7 @@ class StateRepository(private val preferenceMap: Map<String, *>, val context: Co
                             val responseObj = JSONObject(it)
                             val switchArray = responseObj.getJSONArray("switches")
                             for (i in 0 until switchArray.length()) {
-                                val switch = switchArray.getJSONObject(i)
+                                val switch = JSONObject(switchArray.getString(i))
                                 switches.removeAll { match -> match.id == switch.getInt("id") }
 
                                 val switchComponent =
