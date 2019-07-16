@@ -32,6 +32,7 @@ class SubDevicesFragment : Fragment() {
     private var mHandler: Handler? = null
     private var preferenceMap: Map<String, Any?>? = null
     private var onCooldown = SparseLongArray()
+    private var deviceType = ITEM_VIEW_TYPE_SWITCH
 
 
     override fun onCreateView(
@@ -44,9 +45,7 @@ class SubDevicesFragment : Fragment() {
 
         val subDevicesViewModel = ViewModelProviders.of(this).get(SubDevicesViewModel::class.java)
 
-        val arguments = SubDevicesFragmentArgs.fromBundle(arguments!!)
-
-        val adapter = SubHomeAdapter(ItemClickListener(subHomeClickListener = { switchItem ->
+        val switchClickListener = ItemClickListener(subHomeClickListener = { switchItem ->
             onCooldown.append(switchItem.id, System.currentTimeMillis())
             preferenceMap?.let { map ->
                 activity?.applicationContext?.let { context ->
@@ -56,7 +55,24 @@ class SubDevicesFragment : Fragment() {
                     ).sendSwitchUpdate(switchItem)
                 }
             }
-        }))
+        })
+
+        val adapter: SubHomeAdapter
+
+
+        val arguments = SubDevicesFragmentArgs.fromBundle(arguments!!)
+        deviceType = arguments.deviceType
+        when (deviceType) {
+            ITEM_VIEW_TYPE_SWITCH -> {
+                adapter = SubHomeAdapter(switchClickListener)
+                loadSwitches(subDevicesViewModel, adapter)
+            }
+            else -> {
+                adapter = SubHomeAdapter(switchClickListener)
+                loadSwitches(subDevicesViewModel, SubHomeAdapter(switchClickListener))
+            }
+        }
+
 
         val manager = LinearLayoutManager(activity)
 
@@ -66,6 +82,16 @@ class SubDevicesFragment : Fragment() {
         binding.deviceDevicesList.layoutManager = manager
         binding.deviceDevicesList.adapter = adapter
 
+
+        preferenceMap =
+            PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext).all
+        mHandler = Handler()
+        startRepeatingTask()
+
+        return binding.root
+    }
+
+    private fun loadSwitches(subDevicesViewModel: SubDevicesViewModel, adapter: SubHomeAdapter) {
         subDevicesViewModel.switchItemList =
             Database.switches.value?.map { DHItem.SwitchItem(it) }!!
 
@@ -88,13 +114,6 @@ class SubDevicesFragment : Fragment() {
         })
 
         adapter.submitList(subDevicesViewModel.switchItemList)
-
-        preferenceMap =
-            PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext).all
-        mHandler = Handler()
-        startRepeatingTask()
-
-        return binding.root
     }
 
     override fun onDestroy() {
@@ -105,14 +124,19 @@ class SubDevicesFragment : Fragment() {
     private val mStatusChecker: Runnable = object : Runnable {
         override fun run() {
             try {
-                activity?.applicationContext?.let { context ->
-                    preferenceMap?.let { map ->
-                        Database().refreshSwitchStates(
-                            map,
-                            context
-                        )
+                when (deviceType) {
+                    ITEM_VIEW_TYPE_SWITCH -> {
+                        activity?.applicationContext?.let { context ->
+                            preferenceMap?.let { map ->
+                                Database().refreshSwitchStates(
+                                    map,
+                                    context
+                                )
+                            }
+                        }
                     }
                 }
+
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
