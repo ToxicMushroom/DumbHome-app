@@ -16,6 +16,7 @@ import me.melijn.dumbhome.io.SyncDeviceRepository
 import me.melijn.dumbhome.objects.ItemClickListener
 
 const val MAX_ITEMS_PER_TYPE = 1000
+
 class SyncActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,16 +69,22 @@ class SyncActivity : AppCompatActivity() {
 
         SyncDeviceRepository.switches.observe(this, Observer {
 
-            val switchItemList = it.map { switchComponent ->
-                val storedSwitchItem = model.switchItems.firstOrNull { it2 ->
-                    switchComponent.id + ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE == it2.id
-                }
+            val switchItemList = it
+                .map { switchComponent ->
+                    val storedSwitchItem = model.switchItems.firstOrNull { it2 ->
+                        switchComponent.id + ITEM_VIEW_TYPE_SWITCH * MAX_ITEMS_PER_TYPE == it2.id
+                    }
 
-                val switchItem = DHSyncItem.SwitchItem(switchComponent)
-                switchItem.currentState = storedSwitchItem?.currentState
-                        ?: (Database.switches.value?.count { dbSwitch -> dbSwitch.id == switchItem.switchComponent.id } ?: 0 > 0)
-                switchItem
-            }
+                    val switchItem = DHSyncItem.SwitchItem(switchComponent)
+                    switchItem.currentState = storedSwitchItem?.currentState
+                        ?: (Database.switches.value?.count { dbSwitch ->
+                            dbSwitch.id == switchItem.switchComponent.id
+                        } ?: 0 > 0)
+                    switchItem
+                }
+                .sortedBy { switch ->
+                    switch.switchComponent.name
+                }
             model.switchItems.clear()
             model.switchItems.addAll(switchItemList)
             adapter.submitList(switchItemList + listOf(DHSyncItem.FooterItem(ITEM_VIEW_TYPE_FOOTER * MAX_ITEMS_PER_TYPE)))

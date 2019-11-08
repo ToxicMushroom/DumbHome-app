@@ -65,14 +65,19 @@ class SubHomeFragment : Fragment() {
         binding.deviceHomeList.layoutManager = manager
         binding.deviceHomeList.adapter = adapter
 
-        subHomeViewModel.switchItemList = Database.switches.value?.filter {
-            it.location == arguments.locationName.toLocation()
-        }?.map { DHItem.SwitchItem(it) }!!
-
+        Database.switches.value?.let { switchValue ->
+            subHomeViewModel.switchItemList = switchValue
+                .filter {
+                    it.location == arguments.locationName.toLocation()
+                }
+                .sortedBy { switch -> switch.name }
+                .map { DHItem.SwitchItem(it) }
+        }
         Database.switches.observe(this, Observer { array ->
             for (switchComponent in array.iterator()) {
-                val index =
-                    subHomeViewModel.switchItemList.indexOfFirst { item -> item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
+                val index = subHomeViewModel.switchItemList.indexOfFirst { item ->
+                    item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id
+                }
                 if (index != -1 && subHomeViewModel.switchItemList[index].state.value != switchComponent.isOn) {//check if needs update and index isn't non existing
 
                     if (onCooldown.getOrDefault(

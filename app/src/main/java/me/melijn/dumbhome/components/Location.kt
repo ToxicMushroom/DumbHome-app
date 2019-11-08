@@ -1,9 +1,13 @@
 package me.melijn.dumbhome.components
 
+import me.melijn.dumbhome.utils.toUpperWordCase
+
 enum class Location {
     FABIAN_KAMER, MERLIJN_KAMER, SPEELKAMER, WOONKAMER, BUITEN, ANDERE;
 
-    fun toName(): String = this.toString().replace("_", " ")
+    fun toName(): String = this.toString()
+        .replace("_", " ")
+        .toUpperWordCase()
 }
 
 

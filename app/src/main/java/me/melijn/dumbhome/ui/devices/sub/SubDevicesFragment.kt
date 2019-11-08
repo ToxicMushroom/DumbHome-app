@@ -92,13 +92,17 @@ class SubDevicesFragment : Fragment() {
     }
 
     private fun loadSwitches(subDevicesViewModel: SubDevicesViewModel, adapter: SubHomeAdapter) {
-        subDevicesViewModel.switchItemList =
-            Database.switches.value?.map { DHItem.SwitchItem(it) }!!
+        Database.switches.value?.let { switchValue ->
+            subDevicesViewModel.switchItemList = switchValue
+                .sortedBy { switch -> switch.name }
+                .map { DHItem.SwitchItem(it) }
+        }
 
         Database.switches.observe(this, Observer { array ->
             for (switchComponent in array.iterator()) {
-                val index =
-                    subDevicesViewModel.switchItemList.indexOfFirst { item -> item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id }
+                val index = subDevicesViewModel.switchItemList.indexOfFirst { item ->
+                    item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id
+                }
                 if (index != -1 && subDevicesViewModel.switchItemList[index].state.value != switchComponent.isOn) {//check if needs update and index isn't non existing
 
                     if (onCooldown.getOrDefault(

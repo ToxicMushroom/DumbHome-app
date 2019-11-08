@@ -41,14 +41,18 @@ class HomeFragment : Fragment() {
 
         val homeItemList = ArrayList<HomeItem.LocationItem>()
         val locationItemParams = HashMap<Location, Int>()
-        Database.switches.value?.forEach {
-            val amount = locationItemParams.getOrElse(it.location, { 0 })
-            locationItemParams[it.location] = amount + 1
-        }
+        Database.switches.value
+            ?.sortedBy { switch -> switch.name }
+            ?.forEach {
+                val amount = locationItemParams.getOrElse(it.location, { 0 })
+                locationItemParams[it.location] = amount + 1
+            }
 
         for ((id, entry) in locationItemParams.entries.withIndex()) {
             homeItemList.add(HomeItem.LocationItem(id, entry.key, entry.value))
         }
+
+        homeItemList.sortBy { homeItem -> homeItem.location }
 
         adapter.submitList(homeItemList.toList())
         return binding.root
