@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import me.melijn.dumbhome.R
@@ -18,8 +18,9 @@ import me.melijn.dumbhome.ui.sync.ITEM_VIEW_TYPE_SWITCH
 class DevicesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: FragmentDevicesBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_devices, container, false)
-        val dashboardViewModel = ViewModelProviders.of(this).get(DevicesViewModel::class.java)
+        val binding: FragmentDevicesBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_devices, container, false)
+        val dashboardViewModel = ViewModelProvider(this).get(DevicesViewModel::class.java)
 
         binding.viewModel = dashboardViewModel
         binding.lifecycleOwner = this

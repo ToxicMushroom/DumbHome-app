@@ -10,7 +10,7 @@ import androidx.core.util.getOrDefault
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import me.melijn.dumbhome.R
@@ -43,7 +43,7 @@ class SubDevicesFragment : Fragment() {
         val binding: FragmentSubDevicesBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_sub_devices, container, false)
 
-        val subDevicesViewModel = ViewModelProviders.of(this).get(SubDevicesViewModel::class.java)
+        val subDevicesViewModel = ViewModelProvider(this).get(SubDevicesViewModel::class.java)
 
         val switchClickListener = ItemClickListener(subHomeClickListener = { switchItem ->
             onCooldown.append(switchItem.id, System.currentTimeMillis())

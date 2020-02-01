@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import me.melijn.dumbhome.R
@@ -29,7 +29,7 @@ class SyncActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.title_activity_sync)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val model: SyncViewModel = ViewModelProviders.of(this).get(SyncViewModel::class.java)
+        val model: SyncViewModel = ViewModelProvider(this).get(SyncViewModel::class.java)
 
         binding.lifecycleOwner = this
         binding.syncViewModel = model

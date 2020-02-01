@@ -10,7 +10,7 @@ import androidx.core.util.getOrDefault
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import me.melijn.dumbhome.R
@@ -41,7 +41,7 @@ class SubHomeFragment : Fragment() {
         val binding: FragmentSubHomeBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_sub_home, container, false)
 
-        val subHomeViewModel = ViewModelProviders.of(this).get(SubHomeViewModel::class.java)
+        val subHomeViewModel = ViewModelProvider(this).get(SubHomeViewModel::class.java)
 
         val arguments = SubHomeFragmentArgs.fromBundle(arguments!!)
 

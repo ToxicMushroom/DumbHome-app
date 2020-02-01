@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import me.melijn.dumbhome.R
@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val binding: FragmentHomeBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         binding.viewModel = homeViewModel
         binding.lifecycleOwner = this
 
