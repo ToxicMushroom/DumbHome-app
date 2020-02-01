@@ -98,7 +98,7 @@ class SubDevicesFragment : Fragment() {
                 .map { DHItem.SwitchItem(it) }
         }
 
-        Database.switches.observe(this, Observer { array ->
+        Database.switches.observe(viewLifecycleOwner, Observer { array ->
             for (switchComponent in array.iterator()) {
                 val index = subDevicesViewModel.switchItemList.indexOfFirst { item ->
                     item.id == MAX_ITEMS_PER_TYPE * ITEM_VIEW_TYPE_SWITCH + switchComponent.id
